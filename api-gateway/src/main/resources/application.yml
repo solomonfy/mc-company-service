@@ -1,0 +1,34 @@
+server:
+  port: 2020
+
+#access swagger at root path http://localhost:2020/swagger-ui:
+
+  html:
+spring:
+  application:
+    name: MC-API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: MC-COMPANY-SERVICE
+          uri: lb://MC-COMPANY-SERVICE
+          predicates:
+            - Path=/products/**
+        - id: MC-COMPANY-SERVICE
+          uri: lb://MC-COMPANY-SERVICE
+          predicates:
+            - Path=/sites/**
+        - id: MC-ORDER-SERVICE
+          uri: lb://MC-ORDER-SERVICE
+          predicates:
+            - Path=/orders/**
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    instance:
+      hostname: localhost

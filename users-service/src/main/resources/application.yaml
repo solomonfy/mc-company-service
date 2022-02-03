@@ -1,0 +1,23 @@
+
+jwt:
+  secrete: '[z0-qtganhdvkiq4576._=-]%6^bsvjsnbfavcdb#4fcf@5%7&1!23bakjysvjmi'
+
+server:
+  port: 2025
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/medochemie
+      auto-index-creation: true
+  application:
+    name: MC-USERS-SERVICE
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    instance:
+      hostname: localhost
