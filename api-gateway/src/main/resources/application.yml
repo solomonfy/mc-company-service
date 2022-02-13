@@ -3,7 +3,6 @@ server:
 
 #access swagger at root path http://localhost:2020/swagger-ui:
 
-  html:
 spring:
   application:
     name: MC-API-GATEWAY

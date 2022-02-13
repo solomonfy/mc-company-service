@@ -3,6 +3,7 @@ package com.medochemie.ordermanagement.company.entity;
 import com.medochemie.ordermanagement.company.VO.Order;
 import com.medochemie.ordermanagement.company.enums.Formulation;
 
+import com.medochemie.ordermanagement.company.enums.TherapeuticCategory;
 import lombok.Data;
 import lombok.Generated;
 import org.springframework.data.annotation.Id;
@@ -20,13 +21,16 @@ public class Product {
     private String chemicalName;
     private String genericName;
     private Formulation formulation;
+    private TherapeuticCategory category;
     private String brandName;
     private String strength;
     private String packSize;
     private Float unitPrice;
+    private String productCode;
     private List<Site> productionSites;
+    private List<String> imageUrls;
     private boolean active;
-    private String imageUrl;
+    private String HSCode;
     private String createdBy;
     private Date createdOn;
     private String updatedBy;
