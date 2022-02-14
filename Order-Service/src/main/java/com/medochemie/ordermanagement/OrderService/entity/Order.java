@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Document(collection = "Order")
@@ -22,7 +23,7 @@ public class Order {
     private Double amount;
     private String shipment;
     private List<String> productIds;
-//    private List<Product> products;
+    private List<Map<Object, Object>> productIdsWithQty;
 
     @JsonIgnore
     @LastModifiedDate

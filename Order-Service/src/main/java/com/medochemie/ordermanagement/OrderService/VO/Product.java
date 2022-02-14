@@ -1,6 +1,7 @@
 package com.medochemie.ordermanagement.OrderService.VO;
 import com.medochemie.ordermanagement.OrderService.entity.Site;
 import com.medochemie.ordermanagement.OrderService.enums.Formulation;
+import com.medochemie.ordermanagement.OrderService.enums.TherapeuticCategory;
 import lombok.Data;
 
 import java.util.Date;
@@ -14,13 +15,16 @@ public class Product {
     private String chemicalName;
     private String genericName;
     private Formulation formulation;
+    private TherapeuticCategory category;
     private String brandName;
     private String strength;
     private String packSize;
     private Float unitPrice;
+    private String productCode;
     private List<Site> productionSites;
+    private List<String> imageUrls;
     private boolean active;
-    private String imageUrl;
+    private String HSCode;
     private String createdBy;
     private Date createdOn;
     private String updatedBy;

@@ -2,7 +2,6 @@ package com.medochemie.ordermanagement.OrderService.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medochemie.ordermanagement.OrderService.VO.Product;
-import com.medochemie.ordermanagement.OrderService.VO.ResponseTemplateVO;
 import com.medochemie.ordermanagement.OrderService.entity.Order;
 import com.medochemie.ordermanagement.OrderService.entity.Response;
 import com.medochemie.ordermanagement.OrderService.repository.OrderRepository;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.DataInput;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -41,6 +39,7 @@ public class OrderController {
         Map<String, List<Order>> data = new HashMap<>();
         data.put("Orders", repository.findAll());
 
+
         try{
             return ResponseEntity.ok(
                     Response.builder()
@@ -61,6 +60,8 @@ public class OrderController {
     @GetMapping("/list/{id}")
     public ResponseEntity<Response> getOrder(@PathVariable String id){
         LOGGER.info("Returning an order with an id " + id);
+        Map<String, Optional<Order>> data = new HashMap<>();
+        data.put("Order", repository.findById(id));
         try{
             return ResponseEntity.ok(
                     Response.builder()
@@ -68,7 +69,7 @@ public class OrderController {
                             .status(HttpStatus.OK)
                             .statusCode(HttpStatus.OK.value())
                             .message("Returning an order with an id " + id)
-                            .data(of("order", repository.findById(id)))
+                            .data(data)
                             .build()
             );
         } catch (Exception e) {
@@ -95,13 +96,28 @@ public class OrderController {
         List<Product> productList = new ArrayList();
         List<String> listOfProductIds = order.getProductIds();
 
+        // trying to have product id and qty
+        List<Map> productIdsWithQty = new ArrayList<>();
+
+        Map<Object, Object> map;
+        map = new HashMap<Object, Object>();
+//        map.put(1,24000);
+//        map.put(2,18900);
+//        map.put(3,13000);
+//        System.out.println(productIdsWithQty);
+
         Double total = 0D;
 
         for(String productId : listOfProductIds) {
+
             Response response = restTemplate.getForObject("http://MC-COMPANY-SERVICE/products/list/" + productId, Response.class);
             Product product = mapper.convertValue(response.getData().values().toArray()[0], Product.class);
             total += product.getUnitPrice()* product.getQuantity();
             productList.add(product);
+            map.put(productId, product.getQuantity());
+            productIdsWithQty.add(map);
+//            System.out.println(map.values());
+            System.out.println("Product IDs "+map.keySet());;
         }
         order.setAmount(total);
         try{
