@@ -2,6 +2,7 @@ package com.medochemie.ordermanagement.OrderService.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.medochemie.ordermanagement.OrderService.VO.Product;
+import com.medochemie.ordermanagement.OrderService.VO.ProductIdsWithQuantity;
 import com.medochemie.ordermanagement.OrderService.enums.Status;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -24,7 +25,7 @@ public class Order {
     private Double amount;
     private String shipment;
     private Status status;
-    private List<Map<Object, Object>> productIdsWithQty;
+    private List<ProductIdsWithQuantity> productIdsWithQuantities;
 
     @JsonIgnore
     @LastModifiedDate
