@@ -20,13 +20,13 @@ public class Product {
     private String id;
     private String chemicalName;
     private String genericName;
-    private Formulation formulation;
-    private TherapeuticCategory category;
+    private String productCode;
     private String brandName;
     private String strength;
     private String packSize;
     private Float unitPrice;
-    private String productCode;
+    private Formulation formulation;
+    private TherapeuticCategory therapeuticCategory;
     private List<Site> productionSites;
     private List<String> imageUrls;
     private boolean active;

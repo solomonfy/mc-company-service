@@ -83,7 +83,7 @@ public class ProductController {
         );
     }
 
-    @PostMapping("/addProduct")
+    @PostMapping("/list/addProduct")
     public ResponseEntity<Response> addProduct(@RequestBody Product product){
         log.info("Adding " + product.getBrandName());
         Date creationDate = new Date();
@@ -101,7 +101,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/findAllById/{ids}")
+    @GetMapping("/list/findAllById/{ids}")
     public List<Product> productsById(@PathVariable List<String> ids) {
         log.info("Returning all products with ids" + ids);
         System.out.println(ids);
@@ -128,7 +128,7 @@ public class ProductController {
 //        }
 //    };
 
-    @PutMapping("/inactivate_product/{id}")
+    @PutMapping("/list/inactivate_product/{id}")
     public ResponseEntity<Response> inactivateProduct(@PathVariable("id") String id){
         Product foundProduct = repository.findById(id).get();
 
@@ -152,7 +152,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/list/delete/{id}")
     public ResponseEntity<Response> deleteProductById(@PathVariable("id") String id){
         log.info("Deleting a product with id" + id);
         repository.deleteById(id);
