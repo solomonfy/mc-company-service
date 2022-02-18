@@ -19,6 +19,7 @@ import static com.google.common.collect.ImmutableMap.of;
 import static java.time.LocalDateTime.now;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200/", "http://localhost:3000/"})
 @RequestMapping("/orders")
 @Slf4j
 public class OrderController {
@@ -35,11 +36,8 @@ public class OrderController {
     @GetMapping("/list")
     public ResponseEntity<Response> getOrders(){
         log.info("Return all orders");
-
         Map<String, List<Order>> data = new HashMap<>();
         data.put("Orders", repository.findAll());
-
-
         try{
             return ResponseEntity.ok(
                     Response.builder()
@@ -54,7 +52,6 @@ public class OrderController {
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
 
     @GetMapping("/list/{id}")
@@ -94,33 +91,26 @@ public class OrderController {
         Order order = optionalEntity.get();
 
         List<Product> productList = new ArrayList();
-        List<String> listOfProductIds = order.getProductIds();
+        List<Map<Object, Object>> productIdsWithQty = order.getProductIdsWithQty();
 
-        // trying to have product id and qty
-        List<Map> productIdsWithQty = new ArrayList<>();
-
-        Map<Object, Object> map;
-        map = new HashMap<Object, Object>();
-//        map.put(1,24000);
-//        map.put(2,18900);
-//        map.put(3,13000);
-//        System.out.println(productIdsWithQty);
 
         Double total = 0D;
-
-        for(String productId : listOfProductIds) {
-
-            Response response = restTemplate.getForObject("http://MC-COMPANY-SERVICE/products/list/" + productId, Response.class);
-            Product product = mapper.convertValue(response.getData().values().toArray()[0], Product.class);
-            total += product.getUnitPrice()* product.getQuantity();
-            productList.add(product);
-            map.put(productId, product.getQuantity());
-            productIdsWithQty.add(map);
-//            System.out.println(map.values());
-            System.out.println("Product IDs "+map.keySet());;
-        }
         order.setAmount(total);
+
         try{
+            if (productIdsWithQty.toArray().length > 0 ) {
+                for(Map<Object, Object> productIdWithQty : productIdsWithQty) {
+                    String productId = (String) productIdWithQty.values().toArray()[0];
+                    Integer productQty = (Integer) productIdWithQty.values().toArray()[1];
+                    Response response = restTemplate.getForObject("http://MC-COMPANY-SERVICE/products/list/" + productId, Response.class);
+                    Product product = mapper.convertValue(response.getData().values().toArray()[0], Product.class);
+                    total += product.getUnitPrice()* productQty;
+                    productList.add(product);
+                }
+            }
+//            else{
+//                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+//            }
             return ResponseEntity.ok(
                     Response.builder()
                             .timeStamp(now())
@@ -154,6 +144,7 @@ public class OrderController {
         return new ResponseEntity(repository.insert(order), HttpStatus.CREATED);
     }
 
+    // need to work on product IDs
     @PutMapping("/updateOrder/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable("id") String id, @RequestBody Order order){
         Optional<Order> foundOrder = repository.findById(id);
@@ -161,7 +152,7 @@ public class OrderController {
         if (foundOrder.isPresent()){
             Order updatedOrder = foundOrder.get();
             updatedOrder.setAmount(order.getAmount());
-            updatedOrder.setProductIds(order.getProductIds());
+//            updatedOrder.setProductIds(order.getProductIds());
             updatedOrder.setShipment(order.getShipment());
             updatedOrder.setCreatedOn(order.getCreatedOn());
             return new ResponseEntity(repository.save(order), HttpStatus.OK);
