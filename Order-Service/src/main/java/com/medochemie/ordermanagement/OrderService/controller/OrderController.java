@@ -3,6 +3,7 @@ package com.medochemie.ordermanagement.OrderService.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medochemie.ordermanagement.OrderService.VO.Product;
 import com.medochemie.ordermanagement.OrderService.VO.ProductIdsWithQuantity;
+import com.medochemie.ordermanagement.OrderService.controller.utils.GenerateOrderNumber;
 import com.medochemie.ordermanagement.OrderService.entity.Order;
 import com.medochemie.ordermanagement.OrderService.entity.Response;
 import com.medochemie.ordermanagement.OrderService.enums.Status;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import static com.google.common.collect.ImmutableMap.of;
+import static com.medochemie.ordermanagement.OrderService.controller.utils.GenerateOrderNumber.generateOrderNumber;
 import static java.time.LocalDateTime.now;
 
 @RestController
@@ -26,7 +28,7 @@ import static java.time.LocalDateTime.now;
 @Slf4j
 public class OrderController {
 
-    private final static Logger LOGGER = Logger.getLogger("");
+    private Logger LOGGER = Logger.getLogger(String.valueOf(OrderController.class));
     ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
@@ -86,9 +88,9 @@ public class OrderController {
 
     @GetMapping("/list/{id}/products")
     public ResponseEntity<Response> returnCustomResponse(@PathVariable String id){
-        LOGGER.info("Inside returnCustomResponse method of OrderController, found an order of id " + id);
         Optional<Order> optionalEntity = repository.findById(id);
         Order order = optionalEntity.get();
+        LOGGER.info("Inside returnCustomResponse method of OrderController, found an order number " + order.getOrderNumber());
 
         List<Product> productList = new ArrayList();
         List<ProductIdsWithQuantity> productIdsWithQuantities = order.getProductIdsWithQuantities();
@@ -110,7 +112,7 @@ public class OrderController {
                 return ResponseEntity.ok(
                         Response.builder()
                                 .timeStamp(now())
-                                .message("List of products in the order id " + order.getId())
+                                .message("List of products in the order number " + order.getOrderNumber())
                                 .status(HttpStatus.OK)
                                 .statusCode(HttpStatus.OK.value())
                                 .data(of("products", productList))
@@ -146,15 +148,9 @@ public class OrderController {
     @PostMapping("/createOrder")
     public ResponseEntity<Response> createOrder(@RequestBody Order order){
 
-
         Double total = 0D;
-
         Date today = new Date();
-
         String countryCode = "ET";
-        String agentName = firstTwoChars(order.getAgent().getAgentName());
-        Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
-
 
 
         if(order.getProductIdsWithQuantities().toArray().length > 0) {
@@ -170,7 +166,7 @@ public class OrderController {
                 total += product.getUnitPrice() * productQty;
             }
 
-            order.setOrderNumber(countryCode + "/" + agentName +"/" + currentYear);
+            order.setOrderNumber(generateOrderNumber(countryCode, order.getAgent()));
             order.setStatus(Status.Draft);
             order.setCreatedOn(today);
             order.setAmount(total);
@@ -259,8 +255,6 @@ public class OrderController {
 //        }
 //    }
 
-    public String firstTwoChars(String str) {
-        return str.length() < 2 ? str : str.substring(0, 2);
-    }
+
 
 }
