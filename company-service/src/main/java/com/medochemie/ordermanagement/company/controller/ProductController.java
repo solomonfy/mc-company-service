@@ -47,7 +47,7 @@ public class ProductController {
 
 //    returns a product with some fields only
     @GetMapping("/list/{id}")
-    public ResponseEntity<Response> getProductById(@PathVariable("id") String id){
+    public ResponseEntity<Response> getProductByIdWithSomeFields(@PathVariable("id") String id){
         log.info("Retrieving a product with id " + id);
         return ResponseEntity.ok(
                 Response.builder()
@@ -60,17 +60,9 @@ public class ProductController {
         );
     }
 
-    @GetMapping("/list/find/{id}")
-    public ResponseEntity<Product> findProductById(@PathVariable("id") String id) {
-        Product product = repository.findById(id).get();
 
-                log.info("Returning " + product.getBrandName());
-                return new ResponseEntity(product, HttpStatus.OK);
-
-    }
-
-    @GetMapping("/list/find/{id}/detail")
-    public ResponseEntity<Response> getProductByIdWithSpecificValues(@PathVariable("id") String id){
+    @GetMapping("/list/{id}/detail")
+    public ResponseEntity<Response> getProduct(@PathVariable("id") String id){
         log.info("Retrieving product detail for product id " + id);
         return ResponseEntity.ok(
                 Response.builder()

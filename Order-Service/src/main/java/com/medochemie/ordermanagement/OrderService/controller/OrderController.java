@@ -5,6 +5,7 @@ import com.medochemie.ordermanagement.OrderService.VO.Product;
 import com.medochemie.ordermanagement.OrderService.VO.ProductIdsWithQuantity;
 import com.medochemie.ordermanagement.OrderService.entity.Order;
 import com.medochemie.ordermanagement.OrderService.entity.Response;
+import com.medochemie.ordermanagement.OrderService.enums.Status;
 import com.medochemie.ordermanagement.OrderService.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,6 @@ public class OrderController {
         Order order = optionalEntity.get();
 
         List<Product> productList = new ArrayList();
-//        List<Map<Object, Object>> productIdsWithQty = order.getProductIdsWithQty();
         List<ProductIdsWithQuantity> productIdsWithQuantities = order.getProductIdsWithQuantities();
 
         Double total = 0D;
@@ -143,33 +143,70 @@ public class OrderController {
     }
 
 
-    @GetMapping("/page")
-    public Map<String, Object> getAllOrdersInPage(
-
-            @RequestParam(name = "pageNo", defaultValue = "0") int pageNo,
-            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-            @RequestParam(name = "sortBy", defaultValue = "id") String sortBy
-    ){
-        LOGGER.info("Returning in pages");
-        return repository.getAllOrdersInPage(pageNo, pageSize, sortBy);
-    }
-
     @PostMapping("/createOrder")
-    public ResponseEntity<Order> createOrder(@RequestBody Order order){
-        LOGGER.info("Adding a new order for " + order.getAgent().getAgentName());
+    public ResponseEntity<Response> createOrder(@RequestBody Order order){
 
-        return new ResponseEntity(repository.insert(order), HttpStatus.CREATED);
+
+        Double total = 0D;
+
+        Date today = new Date();
+
+        String countryCode = "ET";
+        String agentName = firstTwoChars(order.getAgent().getAgentName());
+        Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+
+
+        if(order.getProductIdsWithQuantities().toArray().length > 0) {
+            LOGGER.info("Adding a new order for " + order.getAgent().getAgentName());
+            List<ProductIdsWithQuantity> productIdsWithQuantity = order.getProductIdsWithQuantities();
+
+            for (ProductIdsWithQuantity productIdWithQty : productIdsWithQuantity) {
+                String productId = productIdWithQty.getProductId();
+                Integer productQty = productIdWithQty.getQuantity();
+
+                Response response = restTemplate.getForObject("http://MC-COMPANY-SERVICE/products/list/" + productId, Response.class);
+                Product product = mapper.convertValue(response.getData().values().toArray()[0], Product.class);
+                total += product.getUnitPrice() * productQty;
+            }
+
+            order.setOrderNumber(countryCode + "/" + agentName +"/" + currentYear);
+            order.setStatus(Status.Draft);
+            order.setCreatedOn(today);
+            order.setAmount(total);
+            return ResponseEntity.ok(
+                    Response.builder()
+                            .timeStamp(now())
+                            .message("New order has been created, with id " + order.getId())
+                            .status(HttpStatus.OK)
+                            .statusCode(HttpStatus.OK.value())
+                            .data(of("order", repository.insert(order)))
+                            .build()
+            );
+        }
+        else{
+            LOGGER.info("Order can't be created!");
+            return ResponseEntity.ok(
+                    Response.builder()
+                            .timeStamp(now())
+                            .status(HttpStatus.BAD_REQUEST)
+                            .statusCode(HttpStatus.BAD_REQUEST.value())
+                            .message("Order can't be created!")
+                            .data(of())
+                            .build()
+            );
+        }
     }
 
-    // need to work on product IDs
+
     @PutMapping("/updateOrder/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable("id") String id, @RequestBody Order order){
-        Optional<Order> foundOrder = repository.findById(id);
         LOGGER.info("Updating an order with id " + order.getId());
+        Optional<Order> foundOrder = repository.findById(id);
         if (foundOrder.isPresent()){
             Order updatedOrder = foundOrder.get();
             updatedOrder.setAmount(order.getAmount());
-//            updatedOrder.setProductIds(order.getProductIds());
+            updatedOrder.setProductIdsWithQuantities(order.getProductIdsWithQuantities());
             updatedOrder.setShipment(order.getShipment());
             updatedOrder.setCreatedOn(order.getCreatedOn());
             return new ResponseEntity(repository.save(order), HttpStatus.OK);
@@ -184,6 +221,17 @@ public class OrderController {
         LOGGER.info("Order number " + id + " has been deleted!");
         repository.deleteById(id);
         return "Order number " + id + " has been deleted!";
+    }
+
+    @GetMapping("/page")
+    public Map<String, Object> getAllOrdersInPage(
+
+            @RequestParam(name = "pageNo", defaultValue = "0") int pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(name = "sortBy", defaultValue = "id") String sortBy
+    ){
+        LOGGER.info("Returning in pages");
+        return repository.getAllOrdersInPage(pageNo, pageSize, sortBy);
     }
 
 
@@ -210,4 +258,9 @@ public class OrderController {
 //            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
 //        }
 //    }
+
+    public String firstTwoChars(String str) {
+        return str.length() < 2 ? str : str.substring(0, 2);
+    }
+
 }
