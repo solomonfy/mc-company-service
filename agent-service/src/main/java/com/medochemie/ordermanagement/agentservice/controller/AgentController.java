@@ -3,6 +3,7 @@ package com.medochemie.ordermanagement.agentservice.controller;
 import com.medochemie.ordermanagement.agentservice.entity.Address;
 import com.medochemie.ordermanagement.agentservice.entity.Agent;
 import com.medochemie.ordermanagement.agentservice.repository.AgentRepository;
+import com.medochemie.ordermanagement.agentservice.service___.impl.AgentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,11 @@ public class AgentController {
     @Autowired
     private AgentRepository repository;
 
+
     @GetMapping("/")
     public ResponseEntity<List<Agent>> findAllAgents() {
+//        List<Agent> agents = repository.findAll();
+//        System.out.println(agents);
         return new ResponseEntity(repository.findAll(), HttpStatus.OK);
     }
 
