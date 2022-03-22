@@ -2,42 +2,42 @@ package com.medochemie.ordermanagement.OrderService.enums;
 
 public enum Status {
 
-    DRAFT(1, "Draft"),
-    UNDER_REVIEW(2, "Under Review"),
-    ACTIVE(3, "Active"),
-    COMPLETED(4, "Completed"),
-    REJECTED(5, "Rejected");
+    Draft("Draft"),
+    Under_Review("Under Review"),
+    Active("Active"),
+    Completed("Completed"),
+    Rejected("Rejected");
 
-    private final int id;
-    private final String display;
+    private final String status;
 
-    Status(int id, String display) {
-        this.id = id;
-        this.display = display;
+    Status(String status) {
+        this.status = status;
     }
 
-    public int getId() {
-        return id;
+    public String getStatus() {
+        return this.status;
     }
 
-    public String getDisplay() {
-        return display;
-    }
-
-    //    Draft("Draft"),
-    //    Under_Review("Under Review"),
-    //    Active("Active"),
-    //    Completed("Completed"),
-    //    Rejected("Rejected");
-
-    //    private final String status;
-    //
-    //    Status(String status){
-    //        this.status = status;
-    //    }
-
-    //    public String getStatus(){
-    //        return this.status;
-    //    }
+    //    DRAFT(1, "Draft"),
+//    UNDER_REVIEW(2, "Under Review"),
+//    ACTIVE(3, "Active"),
+//    COMPLETED(4, "Completed"),
+//    REJECTED(5, "Rejected");
+//
+//    private final int statusId;
+//    private final String displayStatus;
+//
+//    Status(int statusId, String displayStatus) {
+//        this.statusId = statusId;
+//        this.displayStatus = displayStatus;
+//    }
+//
+//    public int getStatusId() {
+//        return statusId;
+//    }
+//
+//    public String getDisplayStatus() {
+//        return displayStatus;
+//    }
 
 }

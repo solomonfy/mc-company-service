@@ -52,7 +52,7 @@ public class OrderController {
                             .build()
             );
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -98,7 +98,6 @@ public class OrderController {
         try {
             if (productIdsWithQuantities.toArray().length > 0) {
                 for (ProductIdsWithQuantity productIdWithQty : productIdsWithQuantities) {
-//                System.out.println(productIdWithQty.getProductId());
                     String productId = productIdWithQty.getProductId();
                     Integer productQty = productIdWithQty.getQuantity();
                     Response response = restTemplate.getForObject("http://MC-COMPANY-SERVICE/api/v1/products/list/" + productId, Response.class);
@@ -162,7 +161,7 @@ public class OrderController {
             }
 
             order.setOrderNumber(generateOrderNumber(countryCode, order.getAgent()));
-            order.setStatus(Status.DRAFT);
+            order.setStatus(Status.Draft);
             order.setCreatedOn(today);
             order.setAmount(total);
             return ResponseEntity.ok(
