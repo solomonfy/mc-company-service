@@ -14,7 +14,8 @@ public enum Formulation {
     Formulation(String formulation) {
         this.formulation = formulation;
     }
-    public String getFormulation(){
+
+    public String getFormulation() {
         return this.formulation;
     }
 }

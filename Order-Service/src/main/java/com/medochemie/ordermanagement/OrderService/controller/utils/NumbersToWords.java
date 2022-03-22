@@ -1,4 +1,4 @@
-package com.medochemie.ordermanagement.company.controller.util;
+package com.medochemie.ordermanagement.OrderService.controller.utils;
 
 import java.text.DecimalFormat;
 
@@ -17,7 +17,7 @@ public class NumbersToWords {
     };
 
     public static String solution(double number) {
-        if (number == 0)
+        if(number == 0)
             return ZERO;
 
         return generate(number).trim();
@@ -25,14 +25,17 @@ public class NumbersToWords {
 
     public static String generate(double number) {
 
-        if (number >= 1000000000) {
-            return generate(number / 1000000000) + " billion " + generate(number % 1000000000);
-        } else if (number >= 1000000) {
-            return generate(number / 1000000) + " million " + generate(number % 1000000);
-        } else if (number >= 1000) {
-            return generate(number / 1000) + " thousand " + generate(number % 1000);
-        } else if (number >= 100) {
-            return generate(number / 100) + " hundred " + generate(number % 100);
+        if(number >= 1000000000) {
+            return generate(number / 1000000000) + " billion " + generate(number % 1000000000) ;
+        }
+        else if(number >= 1000000) {
+            return generate(number / 1000000) + " million " + generate(number % 1000000) ;
+        }
+        else if(number >= 1000) {
+            return generate(number / 1000) + " thousand " + generate(number % 1000) ;
+        }
+        else if(number >= 100) {
+            return generate(number / 100) + " hundred " + generate(number % 100) ;
         }
 
         return generate1To99(number);
@@ -51,7 +54,7 @@ public class NumbersToWords {
         }
     }
 
-    public static String generateNumberWithDecimalPlaces(double number) {
+    public static String generateNumberWithDecimalPlaces(double number){
         DecimalFormat df = new DecimalFormat("#");
         String decimal = df.format((number - Math.floor(number)) * 100);
 

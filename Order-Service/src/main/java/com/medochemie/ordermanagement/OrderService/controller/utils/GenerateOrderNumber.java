@@ -7,10 +7,11 @@ public class GenerateOrderNumber {
 
     public static String generateOrderNumber(String countryCode,Agent agent){
 
+        // need to grab the last generated order #
         Integer currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        String agentName;
-        agentName = firstTwoChars(agent.getAgentName());
-        return countryCode + "/" + agentName +"/" + currentYear;
+        String name;
+        name = firstTwoChars(agent.getAgentName());
+        return countryCode + "/" + name +"/" + currentYear;
     }
 
     public static String firstTwoChars(String str) {

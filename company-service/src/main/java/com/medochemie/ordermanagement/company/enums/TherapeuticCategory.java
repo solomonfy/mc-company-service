@@ -1,7 +1,5 @@
 package com.medochemie.ordermanagement.company.enums;
 
-import lombok.Data;
-
 public enum TherapeuticCategory {
     ANTI_PAIN("ANTI_PAIN"),
     CARDIO_VASCULAR("CARDIO_VASCULAR"),
@@ -10,11 +8,11 @@ public enum TherapeuticCategory {
 
     private final String category;
 
-    TherapeuticCategory(String category){
+    TherapeuticCategory(String category) {
         this.category = category;
     }
 
-    public String getCategory(){
+    public String getCategory() {
         return this.category;
     }
 

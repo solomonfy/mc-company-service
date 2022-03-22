@@ -17,6 +17,7 @@ public class Address {
     private String email;
     private String phone;
     private boolean active;
+    private boolean primaryAddress;
     private String createdBy;
     private Date createdOn;
     private Date updatedOn;

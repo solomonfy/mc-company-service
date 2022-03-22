@@ -1,13 +1,9 @@
 package com.medochemie.ordermanagement.company.entity;
 
-import com.medochemie.ordermanagement.company.VO.Order;
 import com.medochemie.ordermanagement.company.enums.Formulation;
-
 import com.medochemie.ordermanagement.company.enums.TherapeuticCategory;
 import lombok.Data;
-import lombok.Generated;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
