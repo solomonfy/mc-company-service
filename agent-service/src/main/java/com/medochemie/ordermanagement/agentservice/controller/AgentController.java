@@ -3,7 +3,8 @@ package com.medochemie.ordermanagement.agentservice.controller;
 import com.medochemie.ordermanagement.agentservice.entity.Address;
 import com.medochemie.ordermanagement.agentservice.entity.Agent;
 import com.medochemie.ordermanagement.agentservice.repository.AgentRepository;
-import com.medochemie.ordermanagement.agentservice.service___.impl.AgentServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,24 +21,28 @@ import static com.medochemie.ordermanagement.agentservice.controller.utils.Gener
 @RequestMapping("/api/v1/agents")
 public class AgentController {
 
+    private final Logger logger = LoggerFactory.getLogger(Agent.class);
+
+
     @Autowired
     private AgentRepository repository;
 
 
     @GetMapping("/")
     public ResponseEntity<List<Agent>> findAllAgents() {
-//        List<Agent> agents = repository.findAll();
-//        System.out.println(agents);
+        logger.trace("Retrieving all agents!");
+        logger.info("Retrieving all agents!");
         return new ResponseEntity(repository.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Agent> findAgentById(@PathVariable String id) {
-        System.out.println(id);
+        logger.trace("Retrieving an agent witt id " + id);
+        logger.info("Retrieving an agent witt id " + id);
+
         Optional<Agent> optionalAgent = repository.findById(id);
-        System.out.println(optionalAgent);
         Agent agent = optionalAgent.get();
-        System.out.println(agent);
+
 
         return new ResponseEntity(agent, HttpStatus.OK);
     }
