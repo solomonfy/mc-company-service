@@ -19,7 +19,7 @@ import static java.time.LocalDateTime.now;
 
 @Controller
 @RequestMapping("/api/v1/products")
-@CrossOrigin(origins = {"http://localhost:4200/", "http://localhost:3000/"})
+@CrossOrigin(origins = {"http://localhost:4200/", "http://localhost:3000/", "http://localhost:3001/"})
 public class ProductController {
 
     private static final Logger log = Logger.getLogger("");

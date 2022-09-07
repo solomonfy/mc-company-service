@@ -26,7 +26,8 @@ public class Product {
     private Float unitPrice;
     private List<Site> productionSites;
     private boolean active;
-    private String imageUrl;
+//    private String imageUrl;
+    private List<String> imageUrls;
     private String createdBy;
     private Date createdOn;
     private String updatedBy;
