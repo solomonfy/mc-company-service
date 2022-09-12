@@ -1,14 +1,11 @@
 package com.medochemie.ordermanagement.company.entity;
 
-import com.medochemie.ordermanagement.company.VO.Order;
 import com.medochemie.ordermanagement.company.enums.Formulation;
+import com.medochemie.ordermanagement.company.enums.TherapeuticCategory;
 
 import lombok.Data;
-import lombok.Generated;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class Product {
     private Float unitPrice;
     private List<Site> productionSites;
     private boolean active;
-//    private String imageUrl;
+    private TherapeuticCategory category;
     private List<String> imageUrls;
     private String createdBy;
     private Date createdOn;

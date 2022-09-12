@@ -16,4 +16,5 @@ public class BrandName {
     private String id;
     private String brandName;
     private String countryId;
+    
 }
