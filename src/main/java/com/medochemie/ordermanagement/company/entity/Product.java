@@ -1,16 +1,23 @@
 package com.medochemie.ordermanagement.company.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.medochemie.ordermanagement.company.enums.Formulation;
 import com.medochemie.ordermanagement.company.enums.TherapeuticCategory;
 
+import com.medochemie.ordermanagement.company.utils.Constants;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 @Data
-@Document(collection = "Product")
+@SuperBuilder
+@JsonInclude(NON_NULL)
+@Document(collection = Constants.PRODUCT_ENTITY)
 public class Product {
     @Id
     private String id;

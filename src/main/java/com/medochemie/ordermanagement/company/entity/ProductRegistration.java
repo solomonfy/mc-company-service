@@ -8,16 +8,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 @Data
-@Document(collection = Constants.COMPANY_ENTITY)
-public class Company {
+@Document(collection = Constants.PRODUCT_REGISTRATION)
+public class ProductRegistration {
+
     @Id
     private String id;
-    private String fullName;
-    private String website;
-    private Address address;
-    private String createdBy;
+    private String productId;
+    private String countryId;
+    private String brandName;
+    private String registrationNumber;
+    private Date registeredOn;
+    private Date expiresOn;
     private Date createdOn;
-    private Date updatedOn;
-    private String updatedBy;
-
 }

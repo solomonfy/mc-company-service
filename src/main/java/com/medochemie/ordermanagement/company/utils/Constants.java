@@ -2,9 +2,15 @@ package com.medochemie.ordermanagement.company.utils;
 
 public class Constants {
 
+    public static final String COMPANY_ENTITY = "Company";
+    public final static String PRODUCT_ENTITY = "Product";
+    public final static String PRODUCT_REGISTRATION = "ProductRegistrationVO";
+    public static final String DEPARTMENT_ENTITY = "Department";
+    public static final String EMPLOYEE_ENTITY = "Employee";
+    public static final String SITE_ENTITY = "Site";
     public static final String LAST_UPDATED_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
     public static final String CREATED_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
-    
+
     public static final String DRAFT = "Draft";
     public static final String UNDER_REVIEW = "Under Review";
     public static final String ACTIVE = "Active";
